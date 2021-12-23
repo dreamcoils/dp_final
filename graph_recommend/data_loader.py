@@ -1,18 +1,22 @@
-import pandas as pd
-import numpy as np
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
 import random
+
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
 
 
 class DataLoader:
-    '''
+    """
     Data Loader class which makes dataset for training / knowledge graph dictionary
-    '''
+    """
 
     def __init__(self, data):
         self.cfg = {
             'food': {
+                'kg_path': 'data/kg.txt',
+                'rating_path': 'data/user_item.txt',
+                'threshold': 0.0
+            },
+            'movie': {
                 'item2id_path': 'data/movie/item_index2entity_id.txt',
                 'kg_path': 'data/movie/kg.txt',
                 'rating_path': 'data/movie/ratings.csv',
@@ -22,16 +26,12 @@ class DataLoader:
         }
         self.data = data
 
-        df_item2id = pd.read_csv(self.cfg[data]['item2id_path'], sep='\t', header=None, names=['item', 'id'])
         df_kg = pd.read_csv(self.cfg[data]['kg_path'], sep='\t', header=None, names=['head', 'relation', 'tail'])
-        df_rating = pd.read_csv(self.cfg[data]['rating_path'], sep=self.cfg[data]['rating_sep'],
-                                names=['userID', 'itemID', 'rating'], skiprows=1)
+        df_rating = pd.read_csv(self.cfg[data]['rating_path'], sep='\t', header=None, names=['userID', 'itemID', 'rating'])
 
         # df_rating['itemID'] and df_item2id['item'] both represents old entity ID
-        df_rating = df_rating[df_rating['itemID'].isin(df_item2id['item'])]
         df_rating.reset_index(inplace=True, drop=True)
 
-        self.df_item2id = df_item2id
         self.df_kg = df_kg
         self.df_rating = df_rating
 
@@ -47,7 +47,8 @@ class DataLoader:
         '''
         self.user_encoder.fit(self.df_rating['userID'])
         # df_item2id['id'] and df_kg[['head', 'tail']] represents new entity ID
-        self.entity_encoder.fit(pd.concat([self.df_item2id['id'], self.df_kg['head'], self.df_kg['tail']]))
+
+        self.entity_encoder.fit(pd.concat([self.df_kg['head'], self.df_kg['tail']]))
         self.relation_encoder.fit(self.df_kg['relation'])
 
         # encode df_kg
@@ -66,8 +67,6 @@ class DataLoader:
         df_dataset['userID'] = self.user_encoder.transform(self.df_rating['userID'])
 
         # update to new id
-        item2id_dict = dict(zip(self.df_item2id['item'], self.df_item2id['id']))
-        self.df_rating['itemID'] = self.df_rating['itemID'].apply(lambda x: item2id_dict[x])
         df_dataset['itemID'] = self.entity_encoder.transform(self.df_rating['itemID'])
         df_dataset['label'] = self.df_rating['rating'].apply(lambda x: 0 if x < self.cfg[self.data]['threshold'] else 1)
 
@@ -127,3 +126,9 @@ class DataLoader:
 
     def get_num(self):
         return (len(self.user_encoder.classes_), len(self.entity_encoder.classes_), len(self.relation_encoder.classes_))
+
+
+if __name__ == '__main__':
+
+    open("../data/kg.txt")
+
