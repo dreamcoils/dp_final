@@ -35,6 +35,7 @@ class Aggregator(torch.nn.Module):
             output = neighbors_agg.view((-1, self.dim))
 
         output = self.weights(output)
+
         return act(output.view((self.batch_size, -1, self.dim)))
 
     def _mix_neighbor_vectors(self, neighbor_vectors, neighbor_relations, user_embeddings):

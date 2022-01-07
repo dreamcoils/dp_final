@@ -19,6 +19,8 @@ from django_web import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', views.index)
+    path('index/', views.index),
+    path('es/query/', views.es),
+    path('graph/recommend/', views.graph_rec)
 ]
 
