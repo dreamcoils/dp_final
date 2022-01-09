@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>FoodSpec: 您的专属美食顾问</title>
+		<!-- <link rel="preload" href="//at.alicdn.com/t/font_3062638_ppc0qyf3sd.woff2" as="font" type="font/woff2" crossorigin="anonymous"> -->
+		<!-- <link rel="stylesheet" href="//at.alicdn.com/t/font_3062638_ppc0qyf3sd.css"> -->
+		<!-- 引入阿里的矢量图标库 -->
+		<!-- <style>
+		@font-face {
+			font-family: 'iconfont';
+			src: url('//at.alicdn.com/t/font_3062638_ppc0qyf3sd.woff2?t=1640420330620') format('woff2'),
+				 url('//at.alicdn.com/t/font_3062638_ppc0qyf3sd.woff?t=1640420330620') format('woff'),
+				 url('//at.alicdn.com/t/font_3062638_ppc0qyf3sd.ttf?t=1640420330620') format('truetype');
+		  }
+		</style> -->
+		<link rel="stylesheet" type="text/css" href="index.css"/>
+
+		<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+		<script src="./index.js"></script>
+		<!-- <script type="text/javascript">
+			$(document).ready(function () {	
+				$("#search").click(function(){
+					// var food = document.getElementById("search_text")
+					var food = $("#search_text").val();
+					console.log(1,food)
+					var _url = 'http://39.101.165.8:9500/es/query/';
+					// document.getElementById("title_h2").innerHTML = '为您检索到如下美食：';
+					$.ajax({
+						url: _url,
+						dataType:'json',
+						type:"GET",
+						crossDomain:true,
+						data: {
+							q: food
+						},
+						success: function(res) {
+							// document.getElementById("title_h2").innerHTML = '为您检索到如下美食：';
+							console.log(res);
+							$('#title_h2').text('为您检索到如下美食：');
+							// $('#index').getElementById("food_list").innerHTML = res.image_url
+						}
+					});
+				});
+			});
+				
+			</script> -->
+	</head>
+	
+
+	<body>
+		
+		<h1 class='name' style="text-align: center; color: rgb(14, 168, 189);">
+			FoodSpec: 您的专属美食顾问
+		</h1>
+		
+		<br/>
+		<div class="box">
+			<!-- 先创建一个包围盒放置输入框、相机按钮和搜索按钮 -->
+			<input type="text" id="search_text" placeholder="请输入您想搜索的美食" autofocus>
+			<!-- 搜索框 -->
+
+			<!-- <img src='pic.png' width="50" height="50" /> -->
+			<!-- <i class="iconfont">&#xe6bf;</i> -->
+			<!-- <i class="iconfont">&#xe8ba;</i> -->
+			<!-- <i class="pic"> -->
+			<img class='picture' src="./pic.png" onclick="getElementById('inputImage').click()" style="cursor: pointer;"/>
+			<form id="uploadForm" enctype="multipart/form-data">
+				<input type="file" id="inputImage" name="image" style="display: none;"/>
+			</form>
+			
+			<!-- </i> -->
+			<!-- <span class="iconfont icon-tupian"></span> -->
+			<!-- 相机按钮 -->
+			<button id='search'>搜索</button>
+			<!-- 搜索按钮 -->
+		</div>
+		<br/>
+		<h2 class='title_h2' id='title_h2' style="text-align: center;"></h2>
+
+		<div id="product" class="product", style="text-align: center;">
+			
+        </div>
+	</body>
+</html>
+
