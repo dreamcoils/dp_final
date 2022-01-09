@@ -137,7 +137,7 @@ $(document).ready(function () {
             }),
             success: function (res) {
                 console.log(res);
-                $('#title_h2').text('为您检索到如下美食：');
+                $('#title_h2').text('为您检索到与您上传图片相关的美食：');
                 
                 if (res != null) {
                     var res_html = "<ul>";
